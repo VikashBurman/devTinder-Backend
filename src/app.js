@@ -1,21 +1,13 @@
-const express = require("express");
-const {adminAuth} = require("./middlewares/auth")
+const express = require('express');
+require("./config/database")
+
 const app = express();
 
+app.get('/',(req,res)=>{
+  res.send("homepage");
+})
 
-// app.use("/admin",adminAuth);
+app.listen(4000,()=>{
+  console.log("Server Started");
+})
 
-app.get("/admin/getData", (req, res) => {
-  res.send("All data Sent");
-});
-
-app.get("/admin/delete",adminAuth, (req, res) => {
-  res.send("User Deleted");
-});
-app.get("/", (req, res) => {
-  res.send("Homepage");
-});
-
-app.listen(3000, () => {
-  console.log("Server started on port 3000");
-});
