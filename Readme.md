@@ -14,3 +14,19 @@ MiddleWare read about them more
 Http status
 app.use and app.all
 error handling in expressjs
+
+creating cluster
+installing mongoose
+connecting server to db via url
+create userSchema and model
+post/signup for demo data of user
+
+json vs js object
+express.json()
+if duplicate id exisit which will be returned in my case it is oldest one
+get user by email
+make api and get user by different type of mongoose functions get by id 
+explore patch and delete request immplement it
+patch vs put
+options in model methods 
+update user by email    
