@@ -26,10 +26,10 @@ app.post("/signup", async (req, res) => {
   try {
     const user = new User(req.body);
     await user.save();
-    // return res.send("User Saved Successfully");
-    return res.status(201).json({ message: "User saved successfully", user });
+    return res.send("User Saved Successfully");
+    // return res.status(201).json({ message: "User saved successfully", user });
   } catch (error) {
-    return res.status(500).send("Something went Wrong");
+    return res.status(500).send("Error in Saving user " + error);
   }
 });
 
