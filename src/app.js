@@ -12,20 +12,6 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.get("/user", async (req, res) => {
-  const email = req.body.emailId;
-  console.log(email);
-  try {
-    const users = await User.findById("67a2484b89330a16dd6f89fe");
-    if (!users) {
-      res.send("user not found");
-    } else {
-      res.send(users);
-    }
-  } catch (error) {
-    res.status(400).send("Someting went wrong");
-  }
-});
 
 app.post("/signup", async (req, res) => {
   // console.log(req.body);
@@ -71,11 +57,11 @@ app.post("/login", async (req, res) => {
       return res.status(400).send("User not found");
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await user.validatePassword(password)
     if (isPasswordValid) {
-      const token = await jwt.sign({ _id: user._id }, "myPrivateKey");
+      const token = await user.getJWT();
       // console.log(token);
-      res.cookie("token", token);
+      res.cookie("token", token,{ expires: new Date(Date.now() + 900000), httpOnly: true });
       return res.send("Login successfully!!");
     } else {
       return res.status(400).send("password not valid");
@@ -85,41 +71,10 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.delete("/user", async (req, res) => {
-  const userId = req.body.userId;
-  try {
-    const deletedUser = await User.findByIdAndDelete({ _id: userId });
-    if (deletedUser) {
-      // console.log(deletedUser);
-      return res.send("User Deleted");
-    } else {
-      return res.status(404).send("User not found");
-    }
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send("Something went wrong");
-  }
-});
-
-app.patch("/user", async (req, res) => {
-  const data = req.body;
-  const userId = req.body.userId;
-  // if(data.emailId){
-  //   return res.status(400).send("update email is not allowed");
-  // }
-  try {
-    const updatedUser = await User.findByIdAndUpdate(userId, data);
-    if (updatedUser) {
-      // console.log(updatedUser);
-      res.send("User Updated Successfully");
-    } else {
-      res.status(404).send("User not found");
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Something went wrong");
-  }
-});
+app.post("/sendConnectionReq",userAuth,(req,res)=>{
+  const user = req.user;
+  res.send(user.firstName+" Send Connection Request");
+})
 
 app.get("/", (req, res) => {
   res.send("homepage");
