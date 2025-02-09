@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const cookie = require("cookie");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const { userAuth } = require("./middlewares/auth");
 
 const app = express();
 app.use(express.json());
@@ -47,16 +48,16 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.get("/profile", async (req, res) => {
-  const cookies = req.cookies;
-  const { token } = cookies;
-  const decodedMsg = jwt.verify(token, "myPrivateKey");
-  // console.log(decodedMsg);
-  const { _id } = decodedMsg;
-  const loginUser = await User.findById(_id);
-  console.log(loginUser);
-
-  res.send("Reading cookie");
+app.get("/profile", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      throw new Error("User does not exist");
+    }
+    res.send(user);
+  } catch (error) {
+    res.status(400).send("Error " + error);
+  }
 });
 
 app.post("/login", async (req, res) => {
