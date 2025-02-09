@@ -3,9 +3,13 @@ const connectDB = require("./config/database");
 const User = require("./models/user");
 const { validationSignupData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
+const cookie = require("cookie");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/user", async (req, res) => {
   const email = req.body.emailId;
@@ -43,6 +47,18 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+app.get("/profile", async (req, res) => {
+  const cookies = req.cookies;
+  const { token } = cookies;
+  const decodedMsg = jwt.verify(token, "myPrivateKey");
+  // console.log(decodedMsg);
+  const { _id } = decodedMsg;
+  const loginUser = await User.findById(_id);
+  console.log(loginUser);
+
+  res.send("Reading cookie");
+});
+
 app.post("/login", async (req, res) => {
   try {
     const { emailId, password } = req.body;
@@ -55,10 +71,13 @@ app.post("/login", async (req, res) => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(400).send("password not valid");
-    } else {
+    if (isPasswordValid) {
+      const token = await jwt.sign({ _id: user._id }, "myPrivateKey");
+      // console.log(token);
+      res.cookie("token", token);
       return res.send("Login successfully!!");
+    } else {
+      return res.status(400).send("password not valid");
     }
   } catch (error) {
     return res.status(400).send("Error in login" + error);
