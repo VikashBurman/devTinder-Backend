@@ -40,6 +40,23 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
+    photoUrl:{
+        type:String,
+        default:"https://pixabay.com/vectors/avatar-black-head-monochrome-1299805/",
+        validate(value){
+            if(!validator.isURL(value)){
+                throw new Error ("Invalid photot url !! "+value)
+            }
+        }
+
+    },
+    about:{
+        type:String,
+        default:"Default about of user"
+    },
+    skills:{
+        type:[String]
+    }
 },{
     timestamps:true
 });
