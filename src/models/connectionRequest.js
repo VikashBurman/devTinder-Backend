@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
 const connectionRequestSchema = new mongoose.Schema({
-    //senderUserId login user
+    //senderUserId login user // fromUserId
     senderUserId:{
         type:mongoose.Schema.Types.ObjectId,
         required:true
     },
-    //to whom we are sending
+    //to whom we are sending //toUserId
     receiverUserId:{
         type:mongoose.Schema.Types.ObjectId,
         required:true
@@ -23,6 +23,6 @@ const connectionRequestSchema = new mongoose.Schema({
     timestamps:true
 });
 
-const ConnectionRequestModel = new mongoose.Model("ConnectionRequest",connectionRequestSchema);
+const ConnectionRequestModel = new mongoose.model("ConnectionRequest",connectionRequestSchema);
 
 module.exports = ConnectionRequestModel;
