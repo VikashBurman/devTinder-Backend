@@ -4,7 +4,8 @@ const connectionRequestSchema = new mongoose.Schema({
     //senderUserId login user // fromUserId
     senderUserId:{
         type:mongoose.Schema.Types.ObjectId,
-        required:true
+        required:true,
+        ref:"User",
     },
     //to whom we are sending //toUserId
     receiverUserId:{
