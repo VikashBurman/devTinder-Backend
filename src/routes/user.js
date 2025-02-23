@@ -20,6 +20,8 @@ userRouter.get("/user/request/received", userAuth, async (req, res) => {
       receiverUserId: loggedInUser._id,
       status: "interested",
     }).populate("senderUserId", User_Safe_Data);
+    // console.log(connectionRequests);
+    
 
     if (!connectionRequests) {
       return res.json({ message: "no connection request found" });
@@ -64,7 +66,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    let limit = parseInt(req.query.limit) || 10;
     limit = limit > 50 ? 50 : limit;
     const skip = (page - 1) * limit;
 

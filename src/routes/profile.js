@@ -4,7 +4,7 @@ const profileRouter = express.Router();
 const {validateEditProfileData} = require("../utils/validation")
 
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
-  try {
+  try {    
     const user = req.user;
     if (!user) {
       throw new Error("User does not exist");

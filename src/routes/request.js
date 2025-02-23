@@ -45,7 +45,7 @@ requestRouter.post(
         status,
       });
       const data = await connectionRequest.save();
-      console.log(receiverUserId);
+      // console.log(receiverUserId);
 
       res.json({
         message:
@@ -69,6 +69,7 @@ requestRouter.post(
     try {
       const status = req.params.status;
       const requestId = req.params.requestId;
+      
       const allowedMethod = ["accepted", "rejected"];
       if (!allowedMethod.includes(status)) {
         return res.status(404).json({ message: "Invalid status !!" });

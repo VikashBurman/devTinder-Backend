@@ -6,18 +6,19 @@ const userAuth = async (req, res, next) => {
   try {
     const cookies = req.cookies;
     const { token } = cookies;
+    // console.log(token);
+    
     if(!token){
-      throw new Error("Invalid token")
+      // return res.status(401).json({message:"Unauthorized User"})
+      return res.status(401).send("Unauthorized User");
     }
-
     const decodedMsg = jwt.verify(token, "myPrivateKey");
     const { _id } = decodedMsg;
     const loginUser = await User.findById(_id);
     if (!loginUser) {
       throw new Error("User not found");
     }
-    req.user = loginUser; //important
-    // console.log(loginUser);
+    req.user = loginUser;
     next();
   } catch (error) {
     res.status(400).send("Error " + error);
