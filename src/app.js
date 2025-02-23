@@ -7,7 +7,7 @@ const cors = require("cors");
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -29,7 +29,7 @@ app.use("/", userRouter);
 connectDB()
   .then(() => {
     console.log("Connected to DB");
-    app.listen(4000, () => {
+    app.listen(process.env.PORT || 4000, () => {
       console.log("Server Started at 4000");
     });
   })
